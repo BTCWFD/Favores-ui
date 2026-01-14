@@ -29,44 +29,46 @@ export default function Marketplace() {
     }, []);
 
     return (
-        <section id="marketplace" className="py-20 bg-gray-50">
-            <div className="container mx-auto px-4">
-                <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <section id="marketplace" className="py-32 bg-slate-50 relative">
+            <div className="container mx-auto px-6">
+                <div className="flex flex-col md:flex-row md:items-end justify-between mb-20 gap-8 animate-entrance">
                     <div>
-                        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Marketplace de Solidaridad</h2>
-                        <p className="text-gray-600 max-w-2xl">
+                        <h2 className="text-4xl md:text-5xl font-display font-black text-slate-900 mb-4 tracking-tight">Marketplace de Solidaridad</h2>
+                        <p className="text-slate-500 text-lg max-w-2xl font-medium">
                             Explora las necesidades de tu comunidad o encuentra habilidades que otros están ofreciendo sin dinero de por medio.
                         </p>
                     </div>
 
                     <button
                         onClick={() => setIsModalOpen(true)}
-                        className="bg-gradient-to-r from-primary-600 to-accent-600 text-white px-8 py-3 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all active:scale-95 whitespace-nowrap"
+                        className="btn-premium px-10 py-4 rounded-2xl shadow-2xl flex items-center space-x-3"
                     >
-                        + Publicar Favor
+                        <span className="text-xl">+</span>
+                        <span className="uppercase tracking-widest text-sm">Publicar Favor</span>
                     </button>
                 </div>
 
                 {loading ? (
-                    <div className="flex justify-center py-20">
-                        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary-600"></div>
+                    <div className="flex flex-col items-center justify-center py-32 space-y-4">
+                        <div className="w-16 h-16 border-4 border-primary-100 border-t-primary-600 rounded-full animate-spin"></div>
+                        <span className="text-slate-400 font-bold uppercase tracking-widest text-[10px]">Sincronizando Marketplace...</span>
                     </div>
                 ) : favors.length > 0 ? (
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                         {favors.map((favor) => (
                             <FavorCard key={favor.id} favor={favor} onStatusUpdate={loadFavors} />
                         ))}
                     </div>
                 ) : (
-                    <div className="text-center py-20 bg-white rounded-3xl border-2 border-dashed border-gray-200">
-                        <div className="text-5xl mb-4">🤝</div>
-                        <h3 className="text-xl font-bold text-gray-800 mb-2">Aún no hay favores activos</h3>
-                        <p className="text-gray-500 mb-8">Sé el primero en ayudar o pedir ayuda a tu comunidad.</p>
+                    <div className="text-center py-32 glass-card rounded-[3rem] border-2 border-dashed border-slate-200">
+                        <div className="text-7xl mb-6">🤝</div>
+                        <h3 className="text-2xl font-display font-black text-slate-800 mb-3">Aún no hay misiones activas</h3>
+                        <p className="text-slate-500 mb-10 max-w-md mx-auto font-medium">Sé el primero en ayudar o pedir ayuda a tu comunidad y comienza a construir tu Karma.</p>
                         <button
-                            className="text-primary-600 font-bold hover:underline"
+                            className="text-primary-600 font-black uppercase tracking-widest text-xs hover:tracking-[0.2em] transition-all"
                             onClick={() => setIsModalOpen(true)}
                         >
-                            Publicar el primer favor
+                            Publicar el primer favor →
                         </button>
                     </div>
                 )}

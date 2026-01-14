@@ -39,42 +39,48 @@ export default function FavorCard({ favor, onStatusUpdate }: { favor: Favor; onS
     };
 
     return (
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-            <div className="flex justify-between items-start mb-4">
-                <div className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${favor.type === 'ask' ? 'bg-red-100 text-red-600' : 'bg-green-100 text-green-600'
+        <div className="group glass-card rounded-[2.5rem] p-8 transition-all duration-500 hover:scale-[1.02] hover:shadow-2xl hover:shadow-primary-500/10 relative overflow-hidden">
+            {/* Light Sweep Effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-[sweep_2s_infinite] pointer-events-none" />
+
+            <div className="flex justify-between items-start mb-6">
+                <div className={`px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest ${favor.type === 'ask' ? 'bg-red-500/10 text-red-600 border border-red-500/20' : 'bg-emerald-500/10 text-emerald-600 border border-emerald-500/20'
                     }`}>
                     {favor.type === 'ask' ? 'Necesito Ayuda' : 'Ofrezco Ayuda'}
                 </div>
-                <div className="flex items-center space-x-1 text-yellow-600 font-bold text-sm">
-                    <span>✨</span>
+                <div className="flex items-center space-x-1.5 bg-yellow-400/10 text-yellow-700 px-3 py-1.5 rounded-2xl border border-yellow-400/20 font-display font-bold text-sm">
+                    <span className="text-lg">✨</span>
                     <span>{favor.karma_value}</span>
                 </div>
             </div>
 
-            <h3 className="text-xl font-bold text-gray-800 mb-2">{favor.title}</h3>
-            <p className="text-gray-600 text-sm mb-6 line-clamp-3">{favor.description}</p>
+            <h3 className="text-2xl font-display font-bold text-slate-800 mb-3 group-hover:text-primary-600 transition-colors leading-tight">{favor.title}</h3>
+            <p className="text-slate-500 text-sm mb-8 leading-relaxed line-clamp-3">{favor.description}</p>
 
-            <div className="flex items-center justify-between mt-auto">
-                <div className="flex items-center space-x-2">
-                    <div className="w-8 h-8 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-bold text-xs overflow-hidden">
+            <div className="flex items-center justify-between pt-6 border-t border-slate-100">
+                <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-200 flex items-center justify-center text-primary-600 font-bold text-sm overflow-hidden shadow-inner uppercase">
                         {favor.profiles?.avatar_url ? (
-                            <img src={favor.profiles.avatar_url} alt={favor.profiles.full_name} />
+                            <img src={favor.profiles.avatar_url} alt={favor.profiles.full_name} className="w-full h-full object-cover" />
                         ) : (
                             favor.profiles?.full_name?.[0] || '?'
                         )}
                     </div>
-                    <span className="text-xs text-gray-500 font-medium">{favor.profiles?.full_name || 'Usuario'}</span>
+                    <div className="flex flex-col">
+                        <span className="text-xs text-slate-400 font-bold uppercase tracking-tighter">Creador</span>
+                        <span className="text-sm text-slate-700 font-bold">{favor.profiles?.full_name || 'Miembro'}</span>
+                    </div>
                 </div>
 
                 <button
                     onClick={handleAction}
                     disabled={loading || isCreator}
-                    className={`px-4 py-2 rounded-lg text-sm font-bold transition-all ${isCreator
-                            ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                            : 'bg-primary-600 text-white hover:bg-primary-700 active:scale-95'
+                    className={`btn-premium px-6 py-2.5 rounded-xl text-xs uppercase tracking-widest ${isCreator
+                        ? 'from-slate-100 to-slate-200 text-slate-400 cursor-not-allowed shadow-none hover:translate-y-0'
+                        : ''
                         }`}
                 >
-                    {loading ? '...' : isCreator ? 'Tu Favor' : favor.type === 'ask' ? 'Ayudar' : 'Solicitar'}
+                    {loading ? 'Procesando' : isCreator ? 'Tu Favor' : favor.type === 'ask' ? 'Ayudar' : 'Solicitar'}
                 </button>
             </div>
         </div>

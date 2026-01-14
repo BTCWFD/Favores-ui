@@ -9,48 +9,53 @@ export default function Header() {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <header className="container mx-auto px-4 py-4 sm:py-6">
-            <nav className="flex items-center justify-between gap-2">
-                <div className="flex items-center space-x-2 flex-shrink-0">
-                    <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-primary-500 to-accent-500 rounded-lg sm:rounded-xl flex items-center justify-center">
-                        <span className="text-white font-bold text-lg sm:text-xl">F</span>
-                    </div>
-                    <span className="text-xl sm:text-2xl font-bold bg-gradient-to-r from-primary-600 to-accent-600 bg-clip-text text-transparent hidden xs:block">
-                        FAVORES
-                    </span>
-                </div>
-
-                <div className="flex items-center space-x-2 sm:space-x-8">
-                    <div className="hidden md:flex items-center space-x-8">
-                        <a href="#como-funciona" className="text-gray-600 hover:text-primary-600 transition-colors text-sm font-medium">
-                            Cómo Funciona
-                        </a>
-                        <a href="#impacto" className="text-gray-600 hover:text-primary-600 transition-colors text-sm font-medium">
-                            Impacto
-                        </a>
-                    </div>
-                    <KarmaBadge />
-                </div>
-
-                <div className="flex items-center space-x-2 sm:space-x-4">
-                    {!isVerified && (
-                        <button
-                            onClick={() => setIsModalOpen(true)}
-                            className="hidden sm:block text-primary-600 font-semibold hover:underline text-xs sm:text-sm"
-                        >
-                            Verificar
-                        </button>
-                    )}
-                    {isVerified && (
-                        <span className="bg-green-100 text-green-700 px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold border border-green-200">
-                            ✓ <span className="hidden sm:inline">Verificado</span>
+        <header className="glass-nav py-6">
+            <div className="container mx-auto px-6">
+                <nav className="flex items-center justify-between">
+                    <div className="flex items-center space-x-3 flex-shrink-0 group cursor-pointer">
+                        <div className="w-12 h-12 bg-gradient-to-br from-primary-600 to-accent-600 rounded-2xl flex items-center justify-center shadow-lg shadow-primary-500/20 group-hover:rotate-6 transition-transform">
+                            <span className="text-white font-display font-black text-2xl">F</span>
+                        </div>
+                        <span className="text-2xl font-display font-black tracking-tighter bg-gradient-to-r from-slate-900 to-slate-700 bg-clip-text text-transparent hidden sm:block">
+                            FAVORES
                         </span>
-                    )}
-                    <button className="bg-gradient-to-r from-primary-500 to-accent-500 text-white px-4 sm:px-6 py-1.5 sm:py-2 rounded-lg font-medium text-xs sm:text-sm hover:shadow-lg transition-all duration-300">
-                        Perfil
-                    </button>
-                </div>
-            </nav>
+                    </div>
+
+                    <div className="flex items-center space-x-12">
+                        <div className="hidden lg:flex items-center space-x-10">
+                            <a href="#marketplace" className="text-slate-500 hover:text-primary-600 transition-colors text-xs font-black uppercase tracking-widest">
+                                Marketplace
+                            </a>
+                            <a href="#como-funciona" className="text-slate-500 hover:text-primary-600 transition-colors text-xs font-black uppercase tracking-widest">
+                                Protocolo
+                            </a>
+                            <a href="#impacto" className="text-slate-500 hover:text-primary-600 transition-colors text-xs font-black uppercase tracking-widest">
+                                Impacto
+                            </a>
+                        </div>
+                        <KarmaBadge />
+                    </div>
+
+                    <div className="flex items-center space-x-6">
+                        {!isVerified && (
+                            <button
+                                onClick={() => setIsModalOpen(true)}
+                                className="hidden sm:block text-slate-400 hover:text-primary-600 font-black uppercase tracking-widest text-[10px] transition-colors"
+                            >
+                                Verificar Cuenta
+                            </button>
+                        )}
+                        {isVerified && (
+                            <span className="bg-emerald-50 text-emerald-600 px-4 py-1.5 rounded-full text-[10px] font-black tracking-widest border border-emerald-100 hidden md:block">
+                                ✓ VERIFICADO
+                            </span>
+                        )}
+                        <button className="btn-premium px-8 py-2.5 rounded-xl text-xs uppercase tracking-widest shadow-xl">
+                            Dashboard
+                        </button>
+                    </div>
+                </nav>
+            </div>
 
             <IdentityVerification isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
         </header>
