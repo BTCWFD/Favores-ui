@@ -9,6 +9,9 @@ interface UserContextType {
     karma: number;
     verificationStatus: 'none' | 'pending' | 'verified' | 'rejected';
     isVerified: boolean;
+    achievements: any[];
+    peopleHelpedCount: number;
+    favorsCompletedCount: number;
     loading: boolean;
     addKarma: (amount: number, favorId?: string) => Promise<void>;
     spendKarma: (amount: number, favorId?: string) => Promise<void>;
@@ -24,6 +27,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     const [karma, setKarma] = useState(100);
     const [verificationStatus, setVerificationStatus] = useState<'none' | 'pending' | 'verified' | 'rejected'>('none');
     const [isVerified, setIsVerified] = useState(false);
+    const [achievements, setAchievements] = useState<any[]>([]);
+    const [peopleHelpedCount, setPeopleHelpedCount] = useState(0);
+    const [favorsCompletedCount, setFavorsCompletedCount] = useState(0);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -59,7 +65,7 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         try {
             const { data, error } = await supabase
                 .from('profiles')
-                .select('karma_balance, verification_status, is_verified')
+                .select('karma_balance, verification_status, is_verified, achievements, people_helped_count, favors_completed_count')
                 .eq('id', userId)
                 .single();
 
@@ -68,6 +74,9 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
                 setKarma(data.karma_balance);
                 setVerificationStatus(data.verification_status || 'none');
                 setIsVerified(data.is_verified || data.verification_status === 'verified');
+                setAchievements(data.achievements || []);
+                setPeopleHelpedCount(data.people_helped_count || 0);
+                setFavorsCompletedCount(data.favors_completed_count || 0);
             }
         } catch (error) {
             console.error('Error fetching profile:', error);
@@ -160,7 +169,11 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
     };
 
     return (
-        <UserContext.Provider value={{ user, karma, verificationStatus, isVerified, loading, addKarma, spendKarma, requestVerification, verifyUser, signOut }}>
+        <UserContext.Provider value={{
+            user, karma, verificationStatus, isVerified,
+            achievements, peopleHelpedCount, favorsCompletedCount,
+            loading, addKarma, spendKarma, requestVerification, verifyUser, signOut
+        }}>
             {children}
         </UserContext.Provider>
     );

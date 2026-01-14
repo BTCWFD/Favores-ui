@@ -3,10 +3,12 @@ import { useState } from 'react';
 import { useUser } from '@/context/UserContext';
 import KarmaBadge from './KarmaBadge';
 import IdentityVerification from './IdentityVerification';
+import ProfileModal from './ProfileModal';
 
 export default function Header() {
     const { isVerified } = useUser();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isProfileOpen, setIsProfileOpen] = useState(false);
 
     return (
         <header className="glass-nav py-6">
@@ -50,7 +52,10 @@ export default function Header() {
                                 ✓ VERIFICADO
                             </span>
                         )}
-                        <button className="btn-premium px-8 py-2.5 rounded-xl text-xs uppercase tracking-widest shadow-xl">
+                        <button
+                            onClick={() => setIsProfileOpen(true)}
+                            className="btn-premium px-8 py-2.5 rounded-xl text-xs uppercase tracking-widest shadow-xl"
+                        >
                             Dashboard
                         </button>
                     </div>
@@ -58,6 +63,7 @@ export default function Header() {
             </div>
 
             <IdentityVerification isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+            <ProfileModal isOpen={isProfileOpen} onClose={() => setIsProfileOpen(false)} />
         </header>
     );
 }
