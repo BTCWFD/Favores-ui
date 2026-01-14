@@ -11,7 +11,6 @@ export default function Hero() {
     };
 
     return (
-    return (
         <section className="container mx-auto px-4 py-16 md:py-32 relative overflow-hidden">
             {/* Ambient Background Glows */}
             <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary-200/20 blur-[120px] rounded-full -z-10 animate-pulse" />
@@ -103,7 +102,5 @@ export default function Hero() {
                 </div>
             </div>
         </section>
-    );
-}
     );
 }
