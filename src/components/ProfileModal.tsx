@@ -1,11 +1,34 @@
 'use client';
 
 import { useUser } from '@/context/UserContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AchievementCard from './AchievementCard';
+import { supabase } from '@/lib/supabase';
+import { chatService, Conversation } from '@/lib/chatService';
+import ChatWindow from './ChatWindow';
 
 export default function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
     const { user, karma, verificationStatus, isVerified, achievements, peopleHelpedCount, favorsCompletedCount, signOut } = useUser();
+    const [conversations, setConversations] = useState<(Conversation & { favors: { title: string } })[]>([]);
+    const [activeChat, setActiveChat] = useState<{ id: string, title: string } | null>(null);
+
+    useEffect(() => {
+        if (!isOpen || !user) return;
+
+        const fetchConversations = async () => {
+            const { data, error } = await supabase
+                .from('conversations')
+                .select('*, favors(title)')
+                .or(`participant_1_id.eq.${user.id},participant_2_id.eq.${user.id}`)
+                .order('created_at', { ascending: false });
+
+            if (!error && data) {
+                setConversations(data as any);
+            }
+        };
+
+        fetchConversations();
+    }, [isOpen, user]);
 
     if (!isOpen || !user) return null;
 
@@ -85,6 +108,37 @@ export default function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onC
 
                     <div className="mb-10">
                         <h4 className="text-lg font-display font-black text-slate-800 mb-6 flex items-center space-x-2">
+                            <span>💬</span>
+                            <span>Conversaciones Activas</span>
+                        </h4>
+                        <div className="space-y-3">
+                            {conversations.length > 0 ? conversations.map(conv => (
+                                <button
+                                    key={conv.id}
+                                    onClick={() => setActiveChat({ id: conv.id, title: conv.favors.title })}
+                                    className="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-primary-50 border border-slate-100 rounded-2xl transition-all group"
+                                >
+                                    <div className="flex items-center space-x-3">
+                                        <div className="w-10 h-10 bg-slate-200 rounded-xl flex items-center justify-center text-slate-500 group-hover:bg-primary-500 group-hover:text-white transition-colors">
+                                            {conv.favors.title[0]}
+                                        </div>
+                                        <div className="text-left">
+                                            <div className="text-sm font-black text-slate-800">{conv.favors.title}</div>
+                                            <div className="text-[10px] font-medium text-slate-400 uppercase tracking-widest">Coordinando detalles...</div>
+                                        </div>
+                                    </div>
+                                    <span className="text-slate-400 group-hover:text-primary-500">→</span>
+                                </button>
+                            )) : (
+                                <div className="py-8 text-center bg-slate-50 rounded-3xl border-2 border-dashed border-slate-200">
+                                    <p className="text-slate-400 text-sm font-medium">No tienes chats activos.</p>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="mb-10">
+                        <h4 className="text-lg font-display font-black text-slate-800 mb-6 flex items-center space-x-2">
                             <span>🏅</span>
                             <span>Logros Recientes</span>
                         </h4>
@@ -100,6 +154,14 @@ export default function ProfileModal({ isOpen, onClose }: { isOpen: boolean; onC
                     </div>
                 </div>
             </div>
+
+            {activeChat && (
+                <ChatWindow
+                    conversationId={activeChat.id}
+                    title={activeChat.title}
+                    onClose={() => setActiveChat(null)}
+                />
+            )}
         </div>
     );
 }
